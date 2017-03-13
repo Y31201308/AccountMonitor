@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>账户管理</title>
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../select2/css/select2.min.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../select2/js/select2.min.js"></script>
+</head>
+<body>
+    <div id="header" th:include="header :: fragment-header"></div>
+
+    <div id="accountMsg" th:include="account_form :: fragment-accountMsg">
+
+
+    </div>
+
+    <!--<div id="eventMsg" th:include="common :: fragment-eventMsg"></div>
+
+    <div style="padding-top: -15px;margin-top: -15px;padding-left: 20%;padding-right: 25%;">
+        <form th:action="@{/account/editAccount}" method="post" class="form-horizontal">
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newEncode" class="col-sm-2 control-label">编码</label>
+                <input type="text" class="hidden" name="encode" th:value="${account.getEncode()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newEncode" id="newEncode" th:value="${account.getEncode()}"
+                           placeholder="账号编码，不能重复，且必须以字母开头">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newName" class="col-sm-2 control-label">名称</label>
+                <input type="text" class="hidden" name="name" th:value="${account.getName()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newName" id="newName" th:value="${account.getName()}" placeholder="账号名称">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label  for="newAccountType" class="col-sm-2 control-label">账号类型</label>
+                <input type="text" class="hidden" name="accountType" th:value="${account.getAccountType().name()}">
+                <div class="col-sm-10">
+                    <select class="js-example-basic-single js-states form-control" id="newAccountType" name="newAccountType" th:object="${account.getAccountType() == null? false : account.getAccountType().name()}">
+                        <option value="NORMAL">NORMAL</option>
+                        <option value="SHOP_ADMIN" selected="selected">SHOP_ADMIN</option>
+                        <option value="AREA_ADMIN">AREA_ADMIN</option>
+                        <option value="AREA_ADMIN">SUPER_ADMIN</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newStatus" class="col-sm-2 control-label">状态</label>
+                <input type="text" class="hidden" name="status" th:value="${account.getStatus()}">
+                <div class="col-sm-10">
+                    <select class="js-example-basic-single js-states form-control" id="newStatus" name="newStatus">
+                        <option value="NORMAL">NORMAL</option>
+                        <option value="FREEZN" selected = 'selected'>FREEZN</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newComment" class="col-sm-2 control-label">备注</label>
+                <input type="text" class="hidden" name="comment" th:value="${account.getComment()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newComment" th:value="${account.getComment()}" id="newComment" placeholder="备注">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>-->
+    <script th:inline="javascript">
+        var accountType = /*[[${account.getAccountType()}]]*/;
+        $("#newAccountType").val(accountType);
+    </script>
+    <script type="text/javascript">
+        $(".js-example-basic-single").select2();
+
+        var radioChecked = (function (obj) {
+            var status = $(obj).val();
+            $("#newStatus").attr("value" , status);
+        })
+
+        var submitForm = (function () {
+            var encode = $("#encode").val();
+            var name = $("#name").val();
+            var accountType = $("#accountType").val();
+            var acc_status = $("#status").val();
+            var comment = $("#comment").val();
+
+            var newEncode = $("#newEncode").val();
+            var newName = $("#newName").val();
+            var newAccountType = $("#newAccountType").val();
+            var newStatus = $("#newStatus").val();
+            var newComment = $("#newComment").val();
+
+            if(encode == newEncode && name == newName && accountType == newAccountType
+                    && acc_status == newStatus && comment == newComment){
+                alert("未做任何改变。")
+                return ;
+            }
+
+            requestData = {
+                "encode": encode,
+                "name": name,
+                "accountType": accountType,
+                "status": acc_status,
+                "comment": comment,
+
+                "newEncode": newEncode,
+                "newName": newName,
+                "newAccountType": newAccountType,
+                "newStatus": newStatus,
+                "newComment": newComment
+            };
+
+            alert(JSON.stringify(requestData))
+
+            $.ajax({
+                url: "/account/editAccount",
+                type: 'POST',
+                dataType: 'html',
+                data: requestData,
+                success: function(result){
+                    $("#accountMsg").html(result);
+                },
+                error: function (result) {
+                    alert("编辑账户失败；")
+                }
+            });
+        })
+    </script>
+</body>
+</html>

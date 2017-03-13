@@ -1,0 +1,81 @@
+<div th:fragment="fragment-accountMsg">
+    <div id="eventMsg" th:include="common :: fragment-eventMsg"></div>
+
+    <div style="padding-top: -15px;margin-top: -15px;padding-left: 20%;padding-right: 25%;">
+        <form th:action="@{/account/addAccount}" method="post" class="form-horizontal">
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newEncode" class="col-sm-2 control-label">编码</label>
+                <input type="text" class="hidden" id="encode" name="encode" th:value="${account.getEncode()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newEncode" id="newEncode" th:value="${account.getEncode()}"
+                           placeholder="账号编码，不能重复，且必须以字母开头">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newName" class="col-sm-2 control-label">名称</label>
+                <input type="text" class="hidden" id="name" name="name" th:value="${account.getName()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newName" id="newName" th:value="${account.getName()}" placeholder="账号名称">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label  for="newAccountType" class="col-sm-2 control-label">账号类型</label>
+                <input type="text" class="hidden" id="accountType" name="accountType" th:value="${account.getAccountType()}">
+                <div class="col-sm-10">
+                    <select class="js-example-basic-single js-states form-control" id="newAccountType" name="newAccountType">
+                        <option value="NORMAL">NORMAL</option>
+                        <option value="SHOP_ADMIN" selected="selected">SHOP_ADMIN</option>
+                        <option value="AREA_ADMIN">AREA_ADMIN</option>
+                        <option value="AREA_ADMIN">SUPER_ADMIN</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label class="col-sm-2 control-label">状态</label>
+                <input type="text" class="hidden" id="status" name="status" th:value="${account.getStatus()}">
+                <div class="col-sm-10">
+                    <div style="padding-top: 6px;" th:if="${account.getStatus() == null}">
+                        <input type="text" class="hidden" id="newStatus" value="NORMAL"/>
+                        <input type="radio" value="NORMAL" name="newStatus" checked="checked" onclick="radioChecked(this)"/>&nbsp;NORMAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" value="FREEZN" name="newStatus" onclick="radioChecked(this)"/>&nbsp;FREEZN
+                     </div>
+                    <div style="padding-top: 6px;" th:if="${account.getStatus() != null}">
+                        <input type="text" class="hidden" id="newStatus" th:value="${account.getStatus().name()}"/>
+                        <label th:if="${account.getStatus().name() == 'NORMAL'}">
+                            <input type="radio" value="NORMAL" checked="checked" name="newStatus" onclick="radioChecked(this)"/>&nbsp;NORMAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                        <label th:if="${account.getStatus().name() == 'NORMAL'}">
+                            <input type="radio" value="FREEZN" name="newStatus" onclick="radioChecked(this)"/>&nbsp;FREEZN
+                        </label>
+                        <label th:if="${account.getStatus().name() == 'FREEZN'}">
+                            <input type="radio" value="NORMAL" name="newStatus" onclick="radioChecked(this)"/>&nbsp;NORMAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                        <label th:if="${account.getStatus().name() == 'FREEZN'}">
+                            <input type="radio" value="FREEZN" name="newStatus" checked="checked" onclick="radioChecked(this)"/>&nbsp;FREEZN
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="newComment" class="col-sm-2 control-label">备注</label>
+                <input type="text" class="hidden" id="comment" name="comment" th:value="${account.getComment()}">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="newComment" th:value="${account.getComment()}" id="newComment" placeholder="备注">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-default" onclick="submitForm()">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    var accountType = /*[[${account.getAccountType()}]]*/;
+    $("#newAccountType").val(accountType);
+</script>

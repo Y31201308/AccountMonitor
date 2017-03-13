@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>账户管理</title>
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../select2/css/select2.min.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../select2/js/select2.min.js"></script>
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+</head>
+<body>
+    <div id="header" th:include="header :: fragment-header"></div>
+
+    <div id="eventMsg" th:include="common :: fragment-eventMsg"></div>
+
+    <div style="padding-left: 20px;padding-top: -15px;padding-right: 10px;margin-top: -15px;">
+        <div style="float: left;margin-bottom: 10px;">
+            <div class="form-inline">
+                <form th:action="@{/account/dashboard}" method="post">
+                    <div class="form-group">
+                        <label for="encode">编码</label>
+                        <input type="text" th:value="${encode}" class="form-control" id="encode" name="encode" placeholder="账户编码">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">名称</label>
+                        <input type="text" th:value="${name}" class="form-control" id="name" name="name" placeholder="账户名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="startTime">开始时间</label>
+                        <input type="text" th:value="${startTime}" style="width:230px;" class="form-control" id="startTime" name="startTime" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="endTime">结束时间</label>
+                        <input type="text" th:value="${endTime}" style="width:230px;" class="form-control" name="endTime" id="endTime" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <!--<label for="accountType">账号类型</label>-->
+                        <!--<input type="text" th:value="${accountType}" class="form-control" id="accountType" name="accountType" placeholder="">-->
+                        <label  for="accountType">账号类型</label>
+                        <select class="js-example-basic-single js-states form-control" id="accountType" name="accountype">
+                            <option value=""></option>
+                            <option value="NORMAL">NORMAL</option>
+                            <option value="SHOP_ADMIN">SHOP_ADMIN</option>
+                            <option value="AREA_ADMIN">AREA_ADMIN</option>
+                            <option value="AREA_ADMIN">SUPER_ADMIN</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+            </div>
+        </div>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th>编码</th>
+                <th>名称</th>
+                <th>备注</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>最后登录时间</th>
+                <th>账号类型</th>
+                <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;操作</th>
+            </tr>
+            <tbody>
+                <tr th:each="account,iterStat : ${accountList}" th:class="${iterStat.even} ? 'success' : ''" style="height: 25px;">
+                    <td th:text="${account.getEncode()}"></td>
+                    <td th:text="${account.getName()}"></td>
+                    <td th:text="${account.getComment()}"></td>
+                    <td th:text="${account.getStatus().name()}"></td>
+                    <td th:text="${account.getCreateTime()}"></td>
+                    <td th:text="${account.getLastLoginTime()}"></td>
+                    <td th:text="${account.getAccountType().name()}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                操作<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="min-width: 30px;">
+                                <li><a th:href="@{/account/deleteAccount?encode=}+${account.getEncode()}">删除</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a th:href="@{/account/editAccount?encode=}+${account.getEncode()}">编辑</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $("#startTime").daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD HH:mm:ss.SSS +0000'
+                    },
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    startDate: '2012-01-01 00:00:00.000 +0000',
+            }
+        );
+        $("#endTime").daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD HH:mm:ss.SSS +0000'
+                    },
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoApply: true
+                }
+        );
+    </script>
+</body>
+</html>

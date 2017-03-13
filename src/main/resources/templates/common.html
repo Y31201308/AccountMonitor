@@ -1,0 +1,25 @@
+<div th:fragment="fragment-eventMsg">
+    <div style="padding-left: 20px;padding-right: 10px;" th:if="${eventResult != null}">
+        <div  class="alert alert-success" role="alert" th:if="${eventResult.getStatus().toString().equals('OK')}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Error:</strong>
+            <span th:text="${eventResult.getResultMessage()}">Error info</span>
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${eventResult.getStatus().toString().equals('PARTIAL_OK')}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Error:</strong>
+            <span th:text="${eventResult.getResultMessage()}">Error info</span>
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${eventResult.getStatus().toString().equals('NOK')}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Error:</strong>
+            <span th:text="${eventResult.getResultMessage()}">Error info</span>
+        </div>
+    </div>
+</div>
